@@ -16,7 +16,28 @@ sch_name("monitoring_scheme"). // the agent beliefs that it can manage schemes w
 */
 @start_plan
 +!start : org_name(OrgName) & group_name(GroupName) & sch_name(SchemeName) <-
-  .print("Hello world").
+  .print("Hello world");
+
+  // Create organization workspace
+  createWorkspace(OrgName);
+  joinWorkspace(OrgName,WspId);
+  makeArtifact(OrgName, "ora4mas.nopl.OrgBoard",["src/org/org-spec.xml"], OrgArtId)[wid(WspId)];
+  focus(OrgArtId)[wid(WspId)];
+
+  // Create and focus group board
+  createGroup(GroupName, monitoring_team, GrpArtId)[artifact_id(OrgArtId)];
+  focus(GrpArtId)[wid(WspId)];
+  +group(GroupName,"",GroupArtId);
+  // Create and focus scheme board
+  createScheme(SchemeName, monitoring_scheme, SchArtId)[artifact_id(OrgArtId)];
+  //addScheme(SchemeName)[artifact_id(GrpArtId)];
+  focus(SchArtId)[wid(WspId)];
+
+  .print("I have created the group ", GroupName, " and the scheme ", SchemeName, " in the organization ", OrgName);
+
+  .broadcast(tell,new_gr(OrgName, GroupName));
+  ?formationStatus(ok)[artifact_id(GrpArtId)].
+
 
 /* 
  * Plan for reacting to the addition of the test-goal ?formationStatus(ok)
