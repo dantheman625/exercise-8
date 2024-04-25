@@ -30,6 +30,7 @@ sch_name("monitoring_scheme"). // the agent beliefs that it can manage schemes w
   +group(GroupName,"",GroupArtId);
   // Create and focus scheme board
   createScheme(SchemeName, monitoring_scheme, SchArtId)[artifact_id(OrgArtId)];
+  +scheme(SchemeName,"",SchemeArtId);
   //addScheme(SchemeName)[artifact_id(GrpArtId)];
   focus(SchArtId)[wid(WspId)];
 
@@ -51,6 +52,9 @@ sch_name("monitoring_scheme"). // the agent beliefs that it can manage schemes w
   .print("Waiting for group ", GroupName," to become well-formed");
   .wait({+formationStatus(ok)[artifact_id(G)]}). // waits until the belief is added in the belief base
 
++formationStatus(ok)[artifact_id(G)] : group(GroupName,_,G)[artifact_id(OrgName)] & scheme(SchemaName,_,S) <-
+  .print("Group ", GroupName," is well-formed");
+  addScheme(S).
 /* 
  * Plan for reacting to the addition of the goal !inspect(OrganizationalArtifactId)
  * Triggering event: addition of goal !inspect(OrganizationalArtifactId)
