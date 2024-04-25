@@ -23,6 +23,7 @@ sch_name("monitoring_scheme"). // the agent beliefs that it can manage schemes w
   joinWorkspace(OrgName,WspId);
   makeArtifact(OrgName, "ora4mas.nopl.OrgBoard",["src/org/org-spec.xml"], OrgArtId)[wid(WspId)];
   focus(OrgArtId)[wid(WspId)];
+  .broadcast(tell,new_gr(OrgName));
 
   // Create and focus group board
   createGroup(GroupName, monitoring_team, GrpArtId)[artifact_id(OrgArtId)];
@@ -35,8 +36,7 @@ sch_name("monitoring_scheme"). // the agent beliefs that it can manage schemes w
   focus(SchArtId)[wid(WspId)];
 
   .print("I have created the group ", GroupName, " and the scheme ", SchemeName, " in the organization ", OrgName);
-
-  .broadcast(tell,new_gr(OrgName, GroupName));
+  
   ?formationStatus(ok)[artifact_id(GrpArtId)].
 
 

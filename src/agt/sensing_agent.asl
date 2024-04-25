@@ -16,6 +16,13 @@
 +!start : true <-
 	.print("Hello world").
 
++new_gr(OrgName) : true <-
+	joinWorkspace(OrgName);
+	lookupArtifact(OrgName, OrgArtId);
+	focus(OrgArtId);
+	.print("Joined workspace and focusing ", WspId).
+
+
 /* 
  * Plan for reacting to the addition of the goal !read_temperature
  * Triggering event: addition of goal !read_temperature
