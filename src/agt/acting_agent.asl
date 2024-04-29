@@ -17,6 +17,19 @@ robot_td("https://raw.githubusercontent.com/Interactions-HSG/example-tds/main/td
 +!start : true <-
 	.print("Hello world").
 
+
++availableRole(OrgName, GroupName, RoleName) : true <-
+	.print("Available role ", RoleName);
+	joinWorkspace(OrgName);
+	lookupArtifact(OrgName, OrgArtId);
+	focus(OrgArtId);
+	.print("Joined organisation ", OrgName);
+	lookupArtifact(GroupName, GroupId);
+	focus(GroupId);
+	.print("Focusing group ", GroupName);
+	adoptRole(RoleName);
+	.print("Adopted role ", RoleName).
+
 /* 
  * Plan for reacting to the addition of the goal !manifest_temperature
  * Triggering event: addition of goal !manifest_temperature
@@ -44,6 +57,7 @@ robot_td("https://raw.githubusercontent.com/Interactions-HSG/example-tds/main/td
 
 	// invokes the action onto:SetWristAngle for manifesting the temperature with the wrist of the robotic arm
 	invokeAction("https://ci.mines-stetienne.fr/kg/ontology#SetWristAngle", ["https://www.w3.org/2019/wot/json-schema#IntegerSchema"], [Degrees])[artifact_id(Leubot1Id)].
+
 
 /* Import behavior of agents that work in CArtAgO environments */
 { include("$jacamoJar/templates/common-cartago.asl") }

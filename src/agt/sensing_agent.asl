@@ -34,19 +34,19 @@ i_have_plans_for(R) :-
 	.print("Focusing group ", GroupName);
 	lookupArtifact(GroupName, GroupId);
 	focus(GroupId);
-	!reason_role(temperature_reader);
-	!reason_role(temperature_manifestor).
+	!reason_role(temperature_reader, GroupId);
+	!reason_role(temperature_manifestor, GroupId).
 
-+scheme(SchemaName,_,SchemeArtId) : true <-
++scheme(SchemaName,SchemeType,SchemeArtId) : true <-
 	.print("Focusing scheme ", SchemeName);
-	lookupArtifact(SchemeName, SchemeId);
+	lookupArtifact(SchemeType, SchemeId);
 	focus(SchemeId).
 
-+!reason_role(Role) : i_have_plans_for(Role) <-
-	adpotRole(Role);
++!reason_role(Role, GroupArtId) : i_have_plans_for(Role) <-
+	adoptRole(Role)[artifact_id(GroupArtId)];
 	.print("Adopted role ", Role).
 
-+!reason_role(Role) : true <-
++!reason_role(Role, GroupArtId) : true <-
 	.print("Unable to adopt role").
 /* 
  * Plan for reacting to the addition of the goal !read_temperature
