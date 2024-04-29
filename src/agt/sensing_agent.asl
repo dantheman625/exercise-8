@@ -2,6 +2,14 @@
 
 
 /* Initial beliefs and rules */
+role_goal(R, G) :- 
+	role_mission(R, _, M) & mission_goal(M, G).
+
+can_achieve (G) :-
+	.relevant_plans({+!G[scheme(_)]}, LP) & LP \== [].
+
+i_have_plans_for(R) :-
+	not (role_goal(R, G) & not can_achieve(G)).
 
 /* Initial goals */
 !start. // the agent has the goal to start
@@ -16,13 +24,30 @@
 +!start : true <-
 	.print("Hello world").
 
-+new_gr(OrgName) : true <-
++new_org(OrgName) : true <-
 	joinWorkspace(OrgName);
 	lookupArtifact(OrgName, OrgArtId);
 	focus(OrgArtId);
-	.print("Joined workspace and focusing ", WspId).
+	.print("Joined organisation ", OrgName).
 
++group(GroupName,_,GroupArtId) : true <-
+	.print("Focusing group ", GroupName);
+	lookupArtifact(GroupName, GroupId);
+	focus(GroupId);
+	!reason_role(temperature_reader);
+	!reason_role(temperature_manifestor).
 
++scheme(SchemaName,_,SchemeArtId) : true <-
+	.print("Focusing scheme ", SchemeName);
+	lookupArtifact(SchemeName, SchemeId);
+	focus(SchemeId).
+
++!reason_role(Role) : i_have_plans_for(Role) <-
+	adpotRole(Role);
+	.print("Adopted role ", Role).
+
++!reason_role(Role) : true <-
+	.print("Unable to adopt role").
 /* 
  * Plan for reacting to the addition of the goal !read_temperature
  * Triggering event: addition of goal !read_temperature
